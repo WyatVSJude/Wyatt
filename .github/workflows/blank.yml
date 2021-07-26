@@ -1,0 +1,116 @@
+local num = 1
+
+--function that plays when we click 
+function finish()
+	script.Parent.Done.Value = true
+end
+
+function addnumber(newnum)
+	--Figures out what textlabel to change depending how many numbers we already have inputted
+	if num == 1 then
+		num = 2
+		script.Parent.CodeFrame.Display.N1.Text = tostring(newnum)				--Changes TextLabels text to the number (depends on what button we clicked
+		script.Parent.CodeFrame.Display.N1.Size = UDim2.new(0.25, 0, 1, 0)		--Changes TextLabels to make it look better
+	elseif num == 2 then
+		num = 3
+		script.Parent.CodeFrame.Display.N2.Text = tostring(newnum)
+		script.Parent.CodeFrame.Display.N2.Size = UDim2.new(0.25, 0, 1, 0)
+	elseif num == 3 then
+		num = 4
+		script.Parent.CodeFrame.Display.N3.Text = tostring(newnum)
+		script.Parent.CodeFrame.Display.N3.Size = UDim2.new(0.25, 0, 1, 0)
+	elseif num == 4 then
+		num = 5
+		script.Parent.CodeFrame.Display.N4.Text = tostring(newnum)
+		script.Parent.CodeFrame.Display.N4.Size = UDim2.new(0.25, 0, 1, 0)
+	end
+end
+
+--function for deleting a number from the display
+function deletenumber()
+	--Figures out what textlabel to change depending how many numbers we already have inputted
+	if num == 2 then
+		num = 1
+		script.Parent.CodeFrame.Display.N1.Text = "*"							--Changes TextLabels text to "*"
+		script.Parent.CodeFrame.Display.N1.Size = UDim2.new(0.25, 0, 1.4, 0)	--Changes TextLabels to make it look better
+	elseif num == 3 then
+		num = 2
+		script.Parent.CodeFrame.Display.N2.Text = "*"
+		script.Parent.CodeFrame.Display.N2.Size = UDim2.new(0.25, 0, 1.4, 0)
+	elseif num == 4 then
+		num = 3
+		script.Parent.CodeFrame.Display.N3.Text = "*"
+		script.Parent.CodeFrame.Display.N3.Size = UDim2.new(0.25, 0, 1.4, 0)
+	elseif num == 5 then
+		num = 4
+		script.Parent.CodeFrame.Display.N4.Text = "*"
+		script.Parent.CodeFrame.Display.N4.Size = UDim2.new(0.25, 0, 1.4, 0)
+	end
+end
+
+local Frame = script.Parent:WaitForChild("CodeFrame")
+
+--Fucntion for the buttons.
+Frame:WaitForChild("Delete").MouseButton1Click:Connect(function()
+	deletenumber()
+end)
+Frame:WaitForChild("Ok").MouseButton1Click:Connect(function()
+	finish()
+end)
+Frame:WaitForChild("B0").MouseButton1Click:Connect(function()
+	addnumber(0)	--plays addnunber function with a number that matches the button. For example when we pess button0, we play the function with number 0
+end)
+Frame:WaitForChild("B1").MouseButton1Click:Connect(function()
+	addnumber(1)
+end)
+Frame:WaitForChild("B2").MouseButton1Click:Connect(function()
+	addnumber(2)
+end)
+Frame:WaitForChild("B3").MouseButton1Click:Connect(function()
+	addnumber(3)
+end)
+Frame:WaitForChild("B4").MouseButton1Click:Connect(function()
+	addnumber(4)
+end)
+Frame:WaitForChild("B5").MouseButton1Click:Connect(function()
+	addnumber(5)
+end)
+Frame:WaitForChild("B6").MouseButton1Click:Connect(function()
+	addnumber(6)
+end)
+Frame:WaitForChild("B7").MouseButton1Click:Connect(function()
+	addnumber(7)
+end)
+Frame:WaitForChild("B8").MouseButton1Click:Connect(function()
+	addnumber(8)
+end)
+Frame:WaitForChild("B9").MouseButton1Click:Connect(function()
+	addnumber(9)
+end)
+
+--the main function that plays when the script inasidet he door invokes player's client.
+function InputCode()
+	script.Parent.Done.Value = false			--turns Done value to false
+	script.Parent.CodeFrame.Visible = true		--UI becomes visible, so we can type the code
+	script.Parent.Done.Changed:Wait()			--We wait here until the Done value changes to true
+	script.Parent.CodeFrame.Visible = false		--UI turns invisible
+	print('Returning value...')
+	
+	--we "Create" the code from the UI elements
+	local numbers1 = (script.Parent.CodeFrame.Display.N1.Text.. script.Parent.CodeFrame.Display.N2.Text.. script.Parent.CodeFrame.Display.N3.Text.. script.Parent.CodeFrame.Display.N4.Text)
+	local numbers2 = numbers1:gsub("*","")
+	
+	--We change the display to make it ready for next use
+	script.Parent.CodeFrame.Display.N1.Text = "*"
+	script.Parent.CodeFrame.Display.N1.Size = UDim2.new(0.25, 0, 1.4, 0)
+	script.Parent.CodeFrame.Display.N2.Text = "*"
+	script.Parent.CodeFrame.Display.N2.Size = UDim2.new(0.25, 0, 1.4, 0)
+	script.Parent.CodeFrame.Display.N3.Text = "*"
+	script.Parent.CodeFrame.Display.N3.Size = UDim2.new(0.25, 0, 1.4, 0)
+	script.Parent.CodeFrame.Display.N4.Text = "*"
+	script.Parent.CodeFrame.Display.N4.Size = UDim2.new(0.25, 0, 1.4, 0)
+	num = 1
+	return numbers2; ----We return the code back to the server
+end
+
+game:GetService("ReplicatedStorage"):WaitForChild("CodeDoor").OnClientInvoke = InputCode
